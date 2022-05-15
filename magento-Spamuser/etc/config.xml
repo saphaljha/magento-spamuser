@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <spamuser>
+            <spamuser_general>
+                <disallow_strings_first_last>http://,www.,.com</disallow_strings_first_last>
+                <disallow_strings_email>qq.com</disallow_strings_email>
+            </spamuser_general>
+        </spamuser>
+    </default>
+</config>

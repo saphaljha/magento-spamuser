@@ -1,0 +1,26 @@
+{
+    "name": "Saphaljha/Spamuser",
+    "description": "Prevent span customer registration",
+    "type": "magento2-module",
+    "minimum-stability": "stable",
+    "version": "1.0.0",
+    "license": "OSL-3.0",
+    "authors": [
+    {
+        "name": "Saphal Jha",
+        "email": "safal.jha5@gmail.com"
+    }
+    ],
+    "require": {
+        "php": "~7.2.0||~8.1.0",
+        "magento/framework": "103.0.*"
+    },
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Magento\\Spamuser\\": ""
+        }
+    }
+}

@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="spamuser" translate="label" sortOrder="900" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Spam User</label>
+            <tab>Saphal</tab>
+            <resource>Saphaljha_Spamuser::spamuser</resource>
+            <group id="spamuser_general" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>General Settings</label>
+                <field id="disallow_strings_first_last" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Disallow Strings for First Name and Last Name</label>
+                    <comment>Add multiple string separate by comma ",".</comment>
+                </field>
+                <field id="disallow_strings_email" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Disallow Strings for Email</label>
+                    <comment>Add multiple string separate by comma ",".</comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>
