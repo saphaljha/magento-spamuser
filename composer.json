@@ -1,5 +1,5 @@
 {
-    "name": "Saphaljha/magento-spamuser",
+    "name": "saphaljha/magento-spamuser",
     "description": "Prevent span customer registration",
     "type": "magento2-module",
     "minimum-stability": "stable",
