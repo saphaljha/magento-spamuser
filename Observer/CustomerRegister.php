@@ -1,62 +1,71 @@
 <?php
 namespace Saphaljha\Spamuser\Observer;
 
+use Exception;
+use Magento\Framework\App\ResponseFactory;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Message\ManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Psr\Log\LoggerInterface;
+use Saphaljha\Spamuser\Helper\Data;
 
 class CustomerRegister implements ObserverInterface
 {
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface|null
      */
-    protected $_logger = null;
+    protected ?LoggerInterface $logger = null;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
-    protected $_storeManager;
+    protected StoreManagerInterface $storeManager;
 
     /**
-     * @var \Saphaljha\Spamuser\Helper\Data
+     * @var Data
      */
-    protected $_dataHelper;
+    protected Data $dataHelper;
 
     /**
-     * @var \Magento\Framework\Message\ManagerInterface
+     * @var ManagerInterface
      */
-    protected $_messageManager;
+    protected ManagerInterface $messageManager;
 
     /**
-     * @var \Magento\Framework\App\ResponseFactory
+     * @var ResponseFactory
      */
-    private $_responseFactory;
+    private ResponseFactory $responseFactory;
 
     /**
-     * @param \Saphaljha\Spamuser\Helper\Data $dataHelper
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Message\ManagerInterface $messageManager
-     * @param \Magento\Framework\App\ResponseFactory $responseFactory
+     * @param Data $dataHelper
+     * @param LoggerInterface $logger
+     * @param StoreManagerInterface $storeManager
+     * @param ManagerInterface $messageManager
+     * @param ResponseFactory $responseFactory
      */
     public function __construct(
-        \Saphaljha\Spamuser\Helper\Data $dataHelper,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Message\ManagerInterface $messageManager,
-        \Magento\Framework\App\ResponseFactory $responseFactory
+        Data $dataHelper,
+        LoggerInterface $logger,
+        StoreManagerInterface $storeManager,
+        ManagerInterface $messageManager,
+        ResponseFactory $responseFactory
     ) {
-        $this->_responseFactory = $responseFactory;
-        $this->_messageManager = $messageManager;
-        $this->_dataHelper = $dataHelper;
-        $this->_logger = $logger;
-        $this->_storeManager = $storeManager;
+        $this->responseFactory = $responseFactory;
+        $this->messageManager = $messageManager;
+        $this->dataHelper = $dataHelper;
+        $this->logger = $logger;
+        $this->storeManager = $storeManager;
     }
 
     /**
+     * Main function to be executed
+     *
      * @param Observer $observer
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
-    public function execute(Observer $observer)
+    public function execute(Observer $observer): void
     {
         try {
             $customer = $observer->getCustomer();
@@ -64,15 +73,17 @@ class CustomerRegister implements ObserverInterface
             $lastname = $customer->getLastname();
             $email = $customer->getEmail();
 
-            if ($this->_dataHelper->isValidString($firstName) || $this->_dataHelper->isValidString($lastname) || $this->_dataHelper->isValidStringEmail($email)) {
-                $currentUrl = $this->_storeManager->getStore()->getBaseUrl() . 'customer/account/login/';
+            if ($this->dataHelper->isValidString($firstName) ||
+                $this->dataHelper->isValidString($lastname) ||
+                $this->dataHelper->isValidStringEmail($email)
+            ) {
+                $currentUrl = $this->storeManager->getStore()->getBaseUrl() . 'customer/account/login/';
 
-                $this->_messageManager->addError(__('Invalid customer data.'));
-                $this->_responseFactory->create()->setRedirect($currentUrl)->sendResponse();
-                exit();
+                $this->messageManager->addErrorMessage(__('Invalid customer data.'));
+                $this->responseFactory->create()->setRedirect($currentUrl)->sendResponse();
             }
         } catch (Exception $e) {
-            $this->_logger->addDebug("customer_save_before observer failed: " . $e->getMessage());
+            $this->logger->debug("customer_save_before observer failed: " . $e->getMessage());
         }
     }
 }

@@ -1,5 +1,4 @@
 <?php
-
 namespace Saphaljha\Spamuser\Helper;
 
 use Magento\Framework\App\Helper\AbstractHelper;
@@ -7,15 +6,16 @@ use Magento\Store\Model\ScopeInterface;
 
 class Data extends AbstractHelper
 {
-    const XML_PATH_SPAMUSER = 'spamuser/spamuser_general/';
+    private const XML_PATH_SPAMUSER = 'spamuser/spamuser_general/';
 
     /**
      * Config Value
      *
      * @param string $field
+     * @param int|null $storeId
      * @return string
      */
-    public function getConfigValue($field, $storeId = null)
+    public function getConfigValue(string $field, int $storeId = null): string
     {
         return $this->scopeConfig->getValue(
             $field,
@@ -28,9 +28,10 @@ class Data extends AbstractHelper
      * General Config
      *
      * @param string $code
+     * @param int|null $storeId
      * @return string
      */
-    public function getGeneralConfig($code, $storeId = null)
+    public function getGeneralConfig(string $code, int $storeId = null): string
     {
         return $this->getConfigValue(self::XML_PATH_SPAMUSER . $code, $storeId);
     }
@@ -41,7 +42,7 @@ class Data extends AbstractHelper
      * @param string $str
      * @return bool
      */
-    public function isValidString($str)
+    public function isValidString(string $str): bool
     {
         $disallowFirstLastName = $this->getGeneralConfig('disallow_strings_first_last');
         if ($disallowFirstLastName != '') {
@@ -62,7 +63,7 @@ class Data extends AbstractHelper
      * @param string $str
      * @return bool
      */
-    public function isValidStringEmail($str)
+    public function isValidStringEmail(string $str): bool
     {
         $disallowEmail = $this->getGeneralConfig('disallow_strings_email');
         if ($disallowEmail != '') {
@@ -73,7 +74,6 @@ class Data extends AbstractHelper
                 }
             }
         }
-
         return false;
     }
 }
